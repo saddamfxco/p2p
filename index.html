@@ -1,162 +1,770 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Binary Masaniello Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <title>P2P USDT/BDT Trade Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transition: background 0.2s;
+        }
+
+        .app-container {
+            max-width: 560px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 24px rgba(0, 20, 50, 0.06);
+            transition: box-shadow 0.15s;
+            border: 1px solid #eef2f6;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0b1a33;
+            letter-spacing: -0.3px;
+        }
+
+        .badge {
+            background: #e9edf4;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #2c3e66;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: #f0f3f9;
+            border-radius: 60px;
+            padding: 4px;
+            margin-bottom: 18px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 8px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #4a5b7a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: #ffffff;
+            color: #0f2b4f;
+            box-shadow: 0 3px 12px rgba(0, 20, 50, 0.08);
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1f344f;
+            margin-bottom: 5px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #dce2ec;
+            border-radius: 14px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s;
+            color: #0b1a33;
+        }
+
+        input:focus, select:focus {
+            border-color: #2563eb;
+            outline: none;
+            background: #ffffff;
+        }
+
+        input::placeholder {
+            color: #9aabbf;
+            font-weight: 400;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #6b7f9b;
+            margin-top: 3px;
+        }
+
+        .fee-section {
+            background: #f8faff;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #e3eaf3;
+        }
+
+        .fee-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 14px;
+        }
+
+        .fee-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #1f344f;
+        }
+
+        .fee-item input {
+            width: 70px;
+            padding: 6px 6px;
+            border-radius: 10px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .fee-item select {
+            width: 70px;
+            padding: 6px 4px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #0b1a33;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-primary:hover {
+            background: #1c3152;
+        }
+
+        .result-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px 18px;
+            margin-top: 16px;
+            border: 1px solid #eef2f6;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+            margin: 14px 0 10px;
+        }
+
+        .result-item {
+            background: #f8fbff;
+            padding: 12px 10px;
+            border-radius: 16px;
+        }
+
+        .result-item .label {
+            font-size: 11px;
+            color: #6b7f9b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .result-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b1a33;
+            margin-top: 2px;
+        }
+
+        .result-item .value.positive {
+            color: #0b7e3b;
+        }
+
+        .result-item .value.negative {
+            color: #b91c1c;
+        }
+
+        .result-item.span-2 {
+            grid-column: span 2;
+        }
+
+        .breakdown {
+            margin-top: 16px;
+            border-top: 1px solid #e3eaf3;
+            padding-top: 16px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            padding: 4px 0;
+            color: #1f344f;
+        }
+
+        .breakdown-row .amount {
+            font-weight: 500;
+        }
+
+        .warning-box {
+            background: #fef7e8;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin: 12px 0 6px;
+            font-size: 13px;
+            color: #7b5d1e;
+        }
+
+        .history-section {
+            margin-top: 18px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eef2f6;
+            font-size: 13px;
+        }
+
+        .history-item .win {
+            color: #0b7e3b;
+            font-weight: 600;
+        }
+
+        .history-item .loss {
+            color: #b91c1c;
+            font-weight: 600;
+        }
+
+        .flex {
+            display: flex;
+            gap: 8px;
+        }
+
+        .flex .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            background: #eef2f6;
+            border: none;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            color: #1f344f;
+        }
+
+        .btn-secondary:hover {
+            background: #dce2ec;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 {
+            margin-top: 12px;
+        }
+
+        .mt-1 {
+            margin-top: 6px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #0b7e3b;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        @media (max-width: 480px) {
+            .fee-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+<div class="app-container" id="app">
 
-    <div class="container">
-        <header>
-            <h1>Binary Strategy Manager</h1>
-            <p>Masaniello Money Management System</p>
-        </header>
+    <!-- header -->
+    <div style="margin-bottom: 12px; text-align: center;">
+        <h1 style="font-size: 22px; color: #0b1a33; letter-spacing: -0.5px;">P2P Trade Calculator</h1>
+        <p style="color: #4a5b7a; font-size: 14px;">USDT ↔ BDT · Binance · Bitget · Bybit</p>
+    </div>
 
-        <div id="configSection" class="card">
-            <div class="card-header">
-                <h2>Strategy Setup</h2>
+    <!-- mode toggle -->
+    <div class="card">
+        <div class="toggle-group">
+            <button class="toggle-btn active" data-mode="buy" id="modeBuyBtn">📥 USDT কিনব</button>
+            <button class="toggle-btn" data-mode="sell" id="modeSellBtn">📤 USDT বিক্রি করব</button>
+        </div>
+
+        <!-- buy/sell price -->
+        <div class="input-row">
+            <div class="input-group">
+                <label id="priceLabel">Buy Price (BDT)</label>
+                <input type="number" id="buyPrice" value="118.50" step="0.01" placeholder="118.50">
             </div>
-            <div class="card-body">
-                <div class="input-group">
-                    <label>Initial Capital ($)</label>
-                    <input type="number" id="initialCapital" placeholder="70" value="70">
-                </div>
-                
-                <div class="input-group">
-                    <label>Broker Payout (%)</label>
-                    <input type="number" id="payoutPercent" placeholder="80" value="80">
-                    <small>e.g., 82 for 82% return</small>
-                </div>
-
-                <div class="row">
-                    <div class="input-group">
-                        <label>Total Trades</label>
-                        <input type="number" id="totalTrades" placeholder="15" value="15">
-                    </div>
-                    <div class="input-group">
-                        <label>Target Wins</label>
-                        <input type="number" id="targetWins" placeholder="5" value="5">
-                    </div>
-                </div>
-
-                <button class="btn-primary" onclick="startStrategy()">Initialize Strategy</button>
-                <div id="configError" class="error-msg"></div>
+            <div class="input-group">
+                <label id="priceLabel2">Sell Price (BDT)</label>
+                <input type="number" id="sellPrice" value="119.20" step="0.01" placeholder="119.20">
             </div>
         </div>
 
-        <div id="dashboardSection" class="hidden">
-            
-            <div class="status-bar">
-                <div class="status-item">
-                    <span>Balance</span>
-                    <strong id="displayBalance">$0.00</strong>
-                </div>
-                <div class="status-item">
-                    <span>Progress</span>
-                    <strong id="displayProgress">0 / 0</strong>
-                </div>
-                <div class="status-item">
-                    <span>Wins Needed</span>
-                    <strong id="displayWinsNeeded">0</strong>
-                </div>
+        <!-- quantity / capital -->
+        <div class="input-row">
+            <div class="input-group">
+                <label>USDT পরিমাণ</label>
+                <input type="number" id="usdtQty" value="1000" step="1" placeholder="1000">
             </div>
-
-            <div class="trade-card">
-                <h3>Next Trade Amount</h3>
-                <div class="trade-amount" id="nextStakeDisplay">$0.00</div>
-                <p class="trade-info">Based on Broker Payout: <span id="displayPayout">0%</span></p>
-                
-                <div class="action-buttons">
-                    <button class="btn-win" onclick="recordTrade(true)">WIN</button>
-                    <button class="btn-loss" onclick="recordTrade(false)">LOSS</button>
-                </div>
+            <div class="input-group">
+                <label>বিনিয়োগ (BDT)</label>
+                <input type="number" id="investmentBdt" value="118500" step="100" placeholder="118500">
             </div>
-
-            <div class="target-info">
-                Expected Final Capital: <span id="targetCapitalDisplay">$0.00</span>
-            </div>
-
-            <div class="history-section">
-                <h3>Trade History</h3>
-                <table id="historyTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Result</th>
-                            <th>Stake</th>
-                            <th>P/L</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
-            </div>
-
-            <button class="btn-reset" onclick="resetCalculator()">Reset Calculator</button>
         </div>
 
+        <!-- fees -->
+        <div class="fee-section">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-weight: 500; font-size: 14px;">ফি ও খরচ</span>
+                <span style="font-size: 12px; color: #6b7f9b;">শূন্য রাখুন যদি প্রযোজ্য না হয়</span>
+            </div>
+            <div class="fee-grid">
+                <div class="fee-item"><span>Buy Fee</span> <input type="number" id="buyFee" value="0" step="0.01" placeholder="0"></div>
+                <div class="fee-item"><span>Sell Fee</span> <input type="number" id="sellFee" value="0" step="0.01" placeholder="0"></div>
+                <div class="fee-item"><span>Payment Fee</span> <input type="number" id="paymentFee" value="0" step="0.01" placeholder="0"></div>
+                <div class="fee-item"><span>Network/Transfer</span> <input type="number" id="networkFee" value="0" step="0.01" placeholder="0"></div>
+                <div class="fee-item"><span>Slippage (%)</span> <input type="number" id="slippagePct" value="0.2" step="0.1" placeholder="0"></div>
+                <div class="fee-item"><span>অন্যান্য</span> <input type="number" id="otherCost" value="0" step="0.01" placeholder="0"></div>
+            </div>
+        </div>
 
-<footer class="app-footer">
-    <div class="divider"></div>
-    <h3>Join My Community</h3>
-    
-    <div class="social-links">
-        <a href="https://wa.me/8801818206268" target="_blank" class="social-btn whatsapp">WhatsApp</a>
-        <a href="mailto:saddamfxtrader@gmail.com" class="social-btn email">Email Me</a>
-        <a href="https://t.me/saddamfxtrader_channel" target="_blank" class="social-btn telegram">Telegram</a>
-        <a href="https://www.pinterest.com/saddamfxtrader/" target="_blank" class="social-btn pinterest">Pinterest</a>
-        <a href="https://saddamfxtrader.quora.com/" target="_blank" class="social-btn quora">Quora</a>
-        <a href="https://www.facebook.com/saddamfxtrader/" target="_blank" class="social-btn facebook">Facebook</a>
-        <a href="https://saddamfxtrader.blogspot.com/" target="_blank" class="social-btn blogspot">Blog</a>
-        <a href="https://www.youtube.com/@saddamfxtrader" target="_blank" class="social-btn youtube">YouTube</a>
-        <a href="https://t.me/saddamfxtrader_group" target="_blank" class="social-btn telegram">Telegram Group</a>
-        <a href="https://www.tiktok.com/@saddamfxtrader_official" target="_blank" class="social-btn tiktok">TikTok</a>
-        <a href="https://github.com/saddamfxco" target="_blank" class="social-btn github">GitHub</a>
-        <a href="https://www.linkedin.com/in/saddamfxtrader/" target="_blank" class="social-btn linkedin">LinkedIn</a>
-        <a href="https://www.instagram.com/saddamfxtrader?igsh=MWkwZDYyOXlndmVoaA==" target="_blank" class="social-btn instagram">Instagram</a>
-        <a href="#" target="_blank" class="social-btn x">X</a>
-        <a href="#" target="_blank" class="social-btn onlyfans">OnlyFans</a>
+        <button class="btn-primary" id="calculateBtn">🔍 হিসাব করুন</button>
     </div>
 
-    <div class="broker-section">
-        <p>Best Broker</p>
-        <a href="https://poaffiliate.onelink.me/t5P7/ebew5vrm" target="_blank" class="btn-broker">Open Free Account</a>
+    <!-- result area -->
+    <div id="resultArea" class="hidden">
+        <div class="result-card" id="resultCard">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 16px; color: #0b1a33;">📊 ট্রেড ফলাফল</h3>
+                <span class="badge" id="tradeModeBadge">BUY → SELL</span>
+            </div>
+
+            <div class="result-grid" id="resultGrid">
+                <div class="result-item span-2" style="background: #f0f7ff; border: 1px solid #dbeafe;">
+                    <div class="label">নিট লাভ / ক্ষতি (Net Profit)</div>
+                    <div class="value" id="netProfitDisplay">৳ 0.00</div>
+                </div>
+                <div class="result-item"><div class="label">Profit / USDT</div><div class="value" id="profitPerUsdt">৳ 0.00</div></div>
+                <div class="result-item"><div class="label">ROI (%)</div><div class="value" id="roiDisplay">0.00%</div></div>
+                <div class="result-item"><div class="label">মোট বিনিয়োগ</div><div class="value" id="totalInvestmentDisplay">৳ 0</div></div>
+                <div class="result-item"><div class="label">মোট আয়</div><div class="value" id="totalRevenueDisplay">৳ 0</div></div>
+                <div class="result-item"><div class="label">মোট ফি ও খরচ</div><div class="value" id="totalCostDisplay">৳ 0</div></div>
+                <div class="result-item"><div class="label">Break-even Sell</div><div class="value" id="beSellDisplay">৳ 0.00</div></div>
+                <div class="result-item"><div class="label">Max Buy (break-even)</div><div class="value" id="beBuyDisplay">৳ 0.00</div></div>
+            </div>
+
+            <div id="warningBox" class="warning-box hidden"></div>
+
+            <div class="breakdown" id="breakdownArea">
+                <div class="breakdown-row"><span>Gross Profit</span><span class="amount" id="grossProfitDisplay">৳ 0.00</span></div>
+                <div class="breakdown-row"><span>মোট ফি</span><span class="amount" id="totalFeesDisplay">৳ 0.00</span></div>
+                <div class="breakdown-row"><span>Slippage cost</span><span class="amount" id="slippageCostDisplay">৳ 0.00</span></div>
+                <div class="breakdown-row" style="font-weight: 600; border-top: 1px solid #dce2ec; padding-top: 8px; margin-top: 4px;">
+                    <span>নিট লাভ (Net Profit)</span>
+                    <span class="amount" id="netProfitBreakdown">৳ 0.00</span>
+                </div>
+            </div>
+
+            <div class="flex mt-2">
+                <button class="btn-secondary" id="resetBtn">↺ রিসেট</button>
+                <button class="btn-secondary" id="copyResultBtn">📋 কপি</button>
+            </div>
+        </div>
     </div>
 
-    <p class="risk-disclaimer">
-        Risk Warning: Trading involves high risk.<br>Only invest what you can afford to lose.
-    </p>
-</footer>
-        
-
+    <!-- history -->
+    <div class="card history-section" id="historyCard">
+        <div class="card-header">
+            <h2>📋 ট্রেড হিস্টোরি</h2>
+            <span class="badge" id="historyCount">0</span>
+        </div>
+        <div id="historyList">
+            <div style="color: #9aabbf; font-size: 13px; text-align: center; padding: 12px 0;">কোনো হিসাব নেই</div>
+        </div>
+        <button class="btn-secondary" style="width:100%; margin-top:10px;" id="clearHistoryBtn">🗑 হিস্টোরি মুছুন</button>
     </div>
 
-    <script src="script.js"></script>
+    <div style="font-size: 11px; color: #6b7f9b; text-align: center; margin-top: 20px; border-top: 1px solid #e3eaf3; padding-top: 14px;">
+        ⚠️ শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে · P2P মার্কেট ঝুঁকিপূর্ণ
+    </div>
+</div>
 
+<script>
+    (function() {
+        // ----- state -----
+        let mode = 'buy'; // 'buy' or 'sell'
+        let history = [];
 
+        // DOM refs
+        const buyPriceInput = document.getElementById('buyPrice');
+        const sellPriceInput = document.getElementById('sellPrice');
+        const usdtQtyInput = document.getElementById('usdtQty');
+        const investmentBdtInput = document.getElementById('investmentBdt');
+        const buyFeeInput = document.getElementById('buyFee');
+        const sellFeeInput = document.getElementById('sellFee');
+        const paymentFeeInput = document.getElementById('paymentFee');
+        const networkFeeInput = document.getElementById('networkFee');
+        const slippagePctInput = document.getElementById('slippagePct');
+        const otherCostInput = document.getElementById('otherCost');
 
+        const resultArea = document.getElementById('resultArea');
+        const netProfitDisplay = document.getElementById('netProfitDisplay');
+        const profitPerUsdt = document.getElementById('profitPerUsdt');
+        const roiDisplay = document.getElementById('roiDisplay');
+        const totalInvestmentDisplay = document.getElementById('totalInvestmentDisplay');
+        const totalRevenueDisplay = document.getElementById('totalRevenueDisplay');
+        const totalCostDisplay = document.getElementById('totalCostDisplay');
+        const beSellDisplay = document.getElementById('beSellDisplay');
+        const beBuyDisplay = document.getElementById('beBuyDisplay');
+        const grossProfitDisplay = document.getElementById('grossProfitDisplay');
+        const totalFeesDisplay = document.getElementById('totalFeesDisplay');
+        const slippageCostDisplay = document.getElementById('slippageCostDisplay');
+        const netProfitBreakdown = document.getElementById('netProfitBreakdown');
+        const warningBox = document.getElementById('warningBox');
+        const tradeModeBadge = document.getElementById('tradeModeBadge');
+        const historyList = document.getElementById('historyList');
+        const historyCount = document.getElementById('historyCount');
 
+        // ----- helpers -----
+        function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
 
+        function fmt(n) { return '৳ ' + n.toFixed(2); }
 
+        function fmtInt(n) { return '৳ ' + Math.round(n).toLocaleString(); }
 
+        function fmtPct(n) { return n.toFixed(2) + '%'; }
 
+        // ----- core calculation -----
+        function calculate() {
+            const buyPrice = getVal('buyPrice');
+            const sellPrice = getVal('sellPrice');
+            let usdtQty = getVal('usdtQty');
+            let investment = getVal('investmentBdt');
 
+            // auto-calc quantity from investment if investment > 0 and usdtQty == 0
+            if (investment > 0 && usdtQty === 0 && buyPrice > 0) {
+                usdtQty = investment / buyPrice;
+            } else if (usdtQty > 0 && buyPrice > 0 && investment === 0) {
+                investment = usdtQty * buyPrice;
+            } else if (usdtQty === 0 && investment === 0) {
+                usdtQty = 1000;
+                investment = usdtQty * buyPrice;
+            } else if (usdtQty === 0 && investment > 0 && buyPrice > 0) {
+                usdtQty = investment / buyPrice;
+            }
 
+            // if investment is 0 but usdtQty set
+            if (investment === 0 && usdtQty > 0 && buyPrice > 0) {
+                investment = usdtQty * buyPrice;
+            }
 
+            // fees
+            const buyFee = getVal('buyFee');
+            const sellFee = getVal('sellFee');
+            const paymentFee = getVal('paymentFee');
+            const networkFee = getVal('networkFee');
+            const otherCost = getVal('otherCost');
+            const slippagePct = getVal('slippagePct') / 100;
 
+            // gross
+            const buyCost = usdtQty * buyPrice;
+            const sellRevenue = usdtQty * sellPrice;
+            const grossProfit = sellRevenue - buyCost;
 
+            // total fees (fixed)
+            const totalFixedFees = buyFee + sellFee + paymentFee + networkFee + otherCost;
+            const slippageCost = Math.abs(grossProfit) * slippagePct; // conservative
+            const totalCost = totalFixedFees + slippageCost;
+            let netProfit = grossProfit - totalCost;
 
+            // cap to avoid negative investment
+            if (netProfit < -investment) netProfit = -investment;
 
+            const roi = (investment > 0) ? (netProfit / investment) * 100 : 0;
+            const profitPerUsdt = (usdtQty > 0) ? netProfit / usdtQty : 0;
 
+            // break-even sell price (including fees)
+            let beSell = 0;
+            let beBuy = 0;
+            if (usdtQty > 0 && buyPrice > 0) {
+                const totalCostPerUsdt = (totalFixedFees + slippageCost) / usdtQty;
+                beSell = buyPrice + (totalCostPerUsdt);
+                // max buy to break even at current sell
+                beBuy = sellPrice - (totalCostPerUsdt);
+                if (beBuy < 0) beBuy = 0;
+            }
 
+            return {
+                buyPrice,
+                sellPrice,
+                usdtQty,
+                investment,
+                buyCost,
+                sellRevenue,
+                grossProfit,
+                totalFixedFees,
+                slippageCost,
+                totalCost,
+                netProfit,
+                roi,
+                profitPerUsdt,
+                beSell,
+                beBuy
+            };
+        }
 
+        // ----- render result -----
+        function renderResult() {
+            const result = calculate();
 
-    
+            // show result area
+            resultArea.classList.remove('hidden');
 
+            // update values
+            const isProfit = result.netProfit >= 0;
+            netProfitDisplay.textContent = fmt(result.netProfit);
+            netProfitDisplay.className = 'value ' + (isProfit ? 'positive' : 'negative');
 
-    
+            profitPerUsdt.textContent = fmt(result.profitPerUsdt);
+            profitPerUsdt.className = 'value ' + (isProfit ? 'positive' : 'negative');
+
+            roiDisplay.textContent = fmtPct(result.roi);
+            roiDisplay.className = 'value ' + (isProfit ? 'positive' : 'negative');
+
+            totalInvestmentDisplay.textContent = fmtInt(result.investment);
+            totalRevenueDisplay.textContent = fmtInt(result.sellRevenue);
+            totalCostDisplay.textContent = fmt(result.totalCost);
+            beSellDisplay.textContent = fmt(result.beSell);
+            beBuyDisplay.textContent = fmt(result.beBuy);
+
+            grossProfitDisplay.textContent = fmt(result.grossProfit);
+            totalFeesDisplay.textContent = fmt(result.totalFixedFees);
+            slippageCostDisplay.textContent = fmt(result.slippageCost);
+            netProfitBreakdown.textContent = fmt(result.netProfit);
+
+            // warning
+            warningBox.classList.add('hidden');
+            if (result.netProfit < 0) {
+                warningBox.textContent = '⚠️ এই ট্রেডে সম্ভাব্য ক্ষতি হবে। Break-even price দেখে নিন।';
+                warningBox.classList.remove('hidden');
+            } else if (result.netProfit < 50 && result.investment > 1000) {
+                warningBox.textContent = 'ℹ️ মুনাফা খুব কম। ফি বা স্লিপেজ পরীক্ষা করুন।';
+                warningBox.classList.remove('hidden');
+            } else if (result.grossProfit > 0 && result.totalCost > Math.abs(result.grossProfit) * 0.3) {
+                warningBox.textContent = '🧾 ফি ও খরচ মুনাফার তুলনায় বেশি। নেট লাভ কম হতে পারে।';
+                warningBox.classList.remove('hidden');
+            }
+
+            tradeModeBadge.textContent = mode === 'buy' ? 'BUY → SELL' : 'SELL → BUY';
+
+            // add to history
+            addHistory(result);
+        }
+
+        // ----- history -----
+        function addHistory(result) {
+            const entry = {
+                time: new Date().toLocaleTimeString(),
+                buy: result.buyPrice,
+                sell: result.sellPrice,
+                qty: result.usdtQty,
+                net: result.netProfit,
+                roi: result.roi
+            };
+            history.unshift(entry);
+            if (history.length > 20) history.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            historyCount.textContent = history.length;
+            if (history.length === 0) {
+                historyList.innerHTML = '<div style="color: #9aabbf; font-size: 13px; text-align: center; padding: 12px 0;">কোনো হিসাব নেই</div>';
+                return;
+            }
+            history.forEach((h, idx) => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                const sign = h.net >= 0 ? 'win' : 'loss';
+                div.innerHTML = `
+                    <span>#${idx+1} ${h.buy.toFixed(2)} → ${h.sell.toFixed(2)} · ${h.qty.toFixed(0)} USDT</span>
+                    <span class="${sign}">${h.net >= 0 ? '+' : ''}${h.net.toFixed(2)} ৳ (${h.roi.toFixed(2)}%)</span>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        // ----- mode toggle -----
+        function setMode(newMode) {
+            mode = newMode;
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+            const buyLabel = document.getElementById('priceLabel');
+            const sellLabel = document.getElementById('priceLabel2');
+            if (mode === 'buy') {
+                buyLabel.textContent = 'Buy Price (BDT)';
+                sellLabel.textContent = 'Sell Price (BDT)';
+            } else {
+                buyLabel.textContent = 'Sell Price (BDT)';
+                sellLabel.textContent = 'Buy Price (BDT)';
+            }
+            // recalc if result shown
+            if (!resultArea.classList.contains('hidden')) renderResult();
+        }
+
+        // ----- reset -----
+        function resetCalculator() {
+            document.querySelectorAll('input').forEach(inp => {
+                if (inp.id === 'buyPrice') inp.value = '118.50';
+                else if (inp.id === 'sellPrice') inp.value = '119.20';
+                else if (inp.id === 'usdtQty') inp.value = '1000';
+                else if (inp.id === 'investmentBdt') inp.value = '118500';
+                else if (inp.id === 'buyFee' || inp.id === 'sellFee' || inp.id === 'paymentFee' || inp.id === 'networkFee' || inp.id === 'otherCost') inp.value = '0';
+                else if (inp.id === 'slippagePct') inp.value = '0.2';
+            });
+            resultArea.classList.add('hidden');
+            // clear history
+            history = [];
+            renderHistory();
+        }
+
+        // ----- copy result -----
+        function copyResult() {
+            const result = calculate();
+            const text = `
+        P2P Trade Result
+        Buy: ${result.buyPrice.toFixed(2)} BDT | Sell: ${result.sellPrice.toFixed(2)} BDT
+        USDT: ${result.usdtQty.toFixed(2)} | Investment: ${result.investment.toFixed(2)} BDT
+        Gross Profit: ${result.grossProfit.toFixed(2)} BDT
+        Fees & Costs: ${result.totalCost.toFixed(2)} BDT
+        Net Profit: ${result.netProfit.toFixed(2)} BDT
+        ROI: ${result.roi.toFixed(2)}%
+        Profit/USDT: ${result.profitPerUsdt.toFixed(2)} BDT
+        Break-even Sell: ${result.beSell.toFixed(2)} BDT
+            `.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                alert('ফলাফল কপি করা হয়েছে!');
+            }).catch(() => {
+                alert('কপি করতে ব্যর্থ, ম্যানুয়ালি কপি করুন।');
+            });
+        }
+
+        // ----- event binding -----
+        document.getElementById('modeBuyBtn').addEventListener('click', () => setMode('buy'));
+        document.getElementById('modeSellBtn').addEventListener('click', () => setMode('sell'));
+
+        document.getElementById('calculateBtn').addEventListener('click', renderResult);
+
+        document.getElementById('resetBtn').addEventListener('click', resetCalculator);
+
+        document.getElementById('copyResultBtn').addEventListener('click', copyResult);
+
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            history = [];
+            renderHistory();
+        });
+
+        // link investment <-> quantity
+        usdtQtyInput.addEventListener('input', function() {
+            const buyPrice = getVal('buyPrice');
+            const qty = getVal('usdtQty');
+            if (buyPrice > 0 && qty > 0) {
+                investmentBdtInput.value = (qty * buyPrice).toFixed(2);
+            }
+        });
+
+        investmentBdtInput.addEventListener('input', function() {
+            const buyPrice = getVal('buyPrice');
+            const inv = getVal('investmentBdt');
+            if (buyPrice > 0 && inv > 0) {
+                usdtQtyInput.value = (inv / buyPrice).toFixed(4);
+            }
+        });
+
+        // initial render
+        renderHistory();
+        // default auto-calc
+        setTimeout(() => {
+            renderResult();
+        }, 100);
+    })();
+</script>
 </body>
 </html>
