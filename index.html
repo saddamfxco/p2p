@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Binary Masaniello Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Binary Strategy Manager</h1>
+            <p>Masaniello Money Management System</p>
+        </header>
+
+        <div id="configSection" class="card">
+            <div class="card-header">
+                <h2>Strategy Setup</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label>Initial Capital ($)</label>
+                    <input type="number" id="initialCapital" placeholder="70" value="70">
+                </div>
+                
+                <div class="input-group">
+                    <label>Broker Payout (%)</label>
+                    <input type="number" id="payoutPercent" placeholder="80" value="80">
+                    <small>e.g., 82 for 82% return</small>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label>Total Trades</label>
+                        <input type="number" id="totalTrades" placeholder="15" value="15">
+                    </div>
+                    <div class="input-group">
+                        <label>Target Wins</label>
+                        <input type="number" id="targetWins" placeholder="5" value="5">
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startStrategy()">Initialize Strategy</button>
+                <div id="configError" class="error-msg"></div>
+            </div>
+        </div>
+
+        <div id="dashboardSection" class="hidden">
+            
+            <div class="status-bar">
+                <div class="status-item">
+                    <span>Balance</span>
+                    <strong id="displayBalance">$0.00</strong>
+                </div>
+                <div class="status-item">
+                    <span>Progress</span>
+                    <strong id="displayProgress">0 / 0</strong>
+                </div>
+                <div class="status-item">
+                    <span>Wins Needed</span>
+                    <strong id="displayWinsNeeded">0</strong>
+                </div>
+            </div>
+
+            <div class="trade-card">
+                <h3>Next Trade Amount</h3>
+                <div class="trade-amount" id="nextStakeDisplay">$0.00</div>
+                <p class="trade-info">Based on Broker Payout: <span id="displayPayout">0%</span></p>
+                
+                <div class="action-buttons">
+                    <button class="btn-win" onclick="recordTrade(true)">WIN</button>
+                    <button class="btn-loss" onclick="recordTrade(false)">LOSS</button>
+                </div>
+            </div>
+
+            <div class="target-info">
+                Expected Final Capital: <span id="targetCapitalDisplay">$0.00</span>
+            </div>
+
+            <div class="history-section">
+                <h3>Trade History</h3>
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Result</th>
+                            <th>Stake</th>
+                            <th>P/L</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+
+            <button class="btn-reset" onclick="resetCalculator()">Reset Calculator</button>
+        </div>
+
+
+<footer class="app-footer">
+    <div class="divider"></div>
+    <h3>Join My Community</h3>
+    
+    <div class="social-links">
+        <a href="https://wa.me/8801818206268" target="_blank" class="social-btn whatsapp">WhatsApp</a>
+        <a href="mailto:saddamfxtrader@gmail.com" class="social-btn email">Email Me</a>
+        <a href="https://t.me/saddamfxtrader_channel" target="_blank" class="social-btn telegram">Telegram</a>
+        <a href="https://www.pinterest.com/saddamfxtrader/" target="_blank" class="social-btn pinterest">Pinterest</a>
+        <a href="https://saddamfxtrader.quora.com/" target="_blank" class="social-btn quora">Quora</a>
+        <a href="https://www.facebook.com/saddamfxtrader/" target="_blank" class="social-btn facebook">Facebook</a>
+        <a href="https://saddamfxtrader.blogspot.com/" target="_blank" class="social-btn blogspot">Blog</a>
+        <a href="https://www.youtube.com/@saddamfxtrader" target="_blank" class="social-btn youtube">YouTube</a>
+        <a href="https://t.me/saddamfxtrader_group" target="_blank" class="social-btn telegram">Telegram Group</a>
+        <a href="https://www.tiktok.com/@saddamfxtrader_official" target="_blank" class="social-btn tiktok">TikTok</a>
+        <a href="https://github.com/saddamfxco" target="_blank" class="social-btn github">GitHub</a>
+        <a href="https://www.linkedin.com/in/saddamfxtrader/" target="_blank" class="social-btn linkedin">LinkedIn</a>
+        <a href="https://www.instagram.com/saddamfxtrader?igsh=MWkwZDYyOXlndmVoaA==" target="_blank" class="social-btn instagram">Instagram</a>
+        <a href="#" target="_blank" class="social-btn x">X</a>
+        <a href="#" target="_blank" class="social-btn onlyfans">OnlyFans</a>
+    </div>
+
+    <div class="broker-section">
+        <p>Best Broker</p>
+        <a href="https://poaffiliate.onelink.me/t5P7/ebew5vrm" target="_blank" class="btn-broker">Open Free Account</a>
+    </div>
+
+    <p class="risk-disclaimer">
+        Risk Warning: Trading involves high risk.<br>Only invest what you can afford to lose.
+    </p>
+</footer>
+        
+
+    </div>
+
+    <script src="script.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    
+</body>
+</html>
